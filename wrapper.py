@@ -1,5 +1,7 @@
 import sys
 import os
+import skimage
+import numpy as np
 from maskrcnn_utils import InferenceConfig
 from maskrcnn_utils import Dataset
 from mrcnn import model as modellib
@@ -16,14 +18,11 @@ def main(argv):
         nj.job.update(status=Job.RUNNING, progress=0, statusComment="Initialisation...")
         # 1. Prepare data for workflow
         in_imgs, gt_imgs, in_path, gt_path, out_path, tmp_path = prepare_data(problem_cls, nj, is_2d=True, **nj.flags)
-
-        working_path = os.path.join(base_path, "data", str(nj.job.id))
-        gt_suffix = "_lbl"
+        files = [os.path.join(in_path,"{}.tif".format(image.id)) for image in in_imgs]
 
         # 2. Run Mask-RCNN prediction
         nj.job.update(progress=25, statusComment="Launching workflow...")
 
-        files = [os.path.join(in_path,"{}.tif".format(image.id)) for image in in_imgs]
         model_dir = "/Mask_RCNN/logs"
         dataset = Dataset()
         dataset.load_files(files)
@@ -33,6 +32,7 @@ def main(argv):
                                   config = inference_config,
                                   model_dir = model_dir)
         model.load_weights(os.path.join(model_dir,'weights.h5'), by_name=True)
+
         for i,image_id in enumerate(dataset.image_ids):
             tiles = dataset.load_image(image_id)
             orig_size = dataset.get_orig_size(image_id)
@@ -47,10 +47,10 @@ def main(argv):
                     objmask = objmask.astype(np.uint8)
                     objmask = skimage.morphology.binary_erosion(objmask, skimage.morphology.disk(1))
                     tile_mask[objmask > 0] = 255
-            tile_masks.append(tile_mask)
+                tile_masks.append(tile_mask)
     
             mask_img = dataset.merge_tiles(image_id, tile_masks)
-            skimage.io.imsave(files[i], mask_img)
+            skimage.io.imsave(os.path.join(out_path,os.path.basename(files[i])), mask_img)
 
         # 3. Upload data to Cytomine
         upload_data(problem_cls, nj, in_imgs, out_path, **nj.flags, monitor_params={

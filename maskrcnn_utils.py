@@ -32,12 +32,9 @@ class Dataset(utils.Dataset):
         self.add_class("segmentation", 1, "cell")
         for f in files:
             image_id = os.path.basename(f).split('.')[0]
-            img = skimage.io.imread(f)
             self.add_image("segmentation",
                            image_id=image_id,
-                           path=f,
-                           width = img.shape[1],
-                           height = img.shape[0])
+                           path=f)
 
     def load_image(self, image_id):
         image = skimage.io.imread(self.image_info[image_id]['path'])
