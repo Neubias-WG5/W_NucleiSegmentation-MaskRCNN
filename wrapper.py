@@ -23,7 +23,7 @@ def main(argv):
         # 2. Run Mask-RCNN prediction
         nj.job.update(progress=25, statusComment="Launching workflow...")
 
-        model_dir = "/Mask_RCNN/logs"
+        model_dir = "/app"
         dataset = Dataset()
         dataset.load_files(files)
         dataset.prepare()
