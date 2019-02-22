@@ -7,6 +7,7 @@ RUN cd Mask_RCNN && \
     python setup.py install
 
 ADD https://github.com/Neubias-WG5/W_NucleiSegmentation-MaskRCNN/releases/download/v0.2/weights.h5 /app/weights.h5
+RUN chmod 444 /app/weights.h5
 
 ADD wrapper.py /app/wrapper.py
 
