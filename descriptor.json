@@ -5,7 +5,7 @@
     "image": "neubiaswg5/w_nucleisegmentation-maskrcnn",
     "type": "singularity"
   },
-  "command-line": "python wrapper.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE",
+  "command-line": "python wrapper.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE NUCLEI_MAJOR_AXIS",
   "inputs": [
     {
       "id": "cytomine_host",
@@ -50,6 +50,17 @@
       "name": "Cytomine software ID",
       "set-by-server": true,
       "optional": false,
+      "type": "Number"
+    },
+    {
+      "id": "nuclei_major_axis",
+      "value-key": "@ID",
+      "command-line-flag": "--@id",
+      "name": "Max estimated diameter of a nucleus",
+      "description": "Max estimated diameter of a nucleus",
+      "default-value": 64,
+      "set-by-server": false,
+      "optional": true,
       "type": "Number"
     }
   ],

@@ -34,21 +34,15 @@ def main(argv):
         model.load_weights(os.path.join(model_dir,'weights.h5'), by_name=True)
 
         for i,image_id in enumerate(dataset.image_ids):
-            tiles = dataset.load_image(image_id)
+            tiles = dataset.load_image(image_id, 128)#nj.parameters.nuclei_major_axis)
             orig_size = dataset.get_orig_size(image_id)
             mask_img = np.zeros(orig_size, dtype=np.uint8)
 
             tile_masks = []
             for image in tiles:
-                tile_mask = np.zeros(image.shape[:2], dtype=np.uint8)
                 mask = model.detect([image], verbose=0)[0]
-                for m in range(mask['masks'].shape[2]):
-                    objmask = mask['masks'][:,:,m]
-                    objmask = objmask.astype(np.uint8)
-                    objmask = skimage.morphology.binary_erosion(objmask, skimage.morphology.disk(1))
-                    tile_mask[objmask > 0] = 255
-                tile_masks.append(tile_mask)
-    
+                tile_masks.append(mask)
+
             mask_img = dataset.merge_tiles(image_id, tile_masks)
             skimage.io.imsave(os.path.join(out_path,os.path.basename(files[i])), mask_img)
 
