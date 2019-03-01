@@ -34,7 +34,7 @@ def main(argv):
         model.load_weights(os.path.join(model_dir,'weights.h5'), by_name=True)
 
         for i,image_id in enumerate(dataset.image_ids):
-            tiles = dataset.load_image(image_id, 128)#nj.parameters.nuclei_major_axis)
+            tiles = dataset.load_image(image_id, nj.parameters.nuclei_major_axis)
             orig_size = dataset.get_orig_size(image_id)
             mask_img = np.zeros(orig_size, dtype=np.uint8)
 
