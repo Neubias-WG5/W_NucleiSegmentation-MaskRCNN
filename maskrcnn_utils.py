@@ -57,9 +57,9 @@ class Dataset(utils.Dataset):
                 for x in range(0, image.shape[1], IMAGE_SIZE[1]-tile_overlap):
                     xcoord = x
                     ycoord = y
-                    if xcoord + IMAGE_SIZE[1] >= image.shape[1]:
+                    if (xcoord + IMAGE_SIZE[1] >= image.shape[1]) and (xcoord != 0):
                         xcoord = image.shape[1] - IMAGE_SIZE[1]
-                    if ycoord + IMAGE_SIZE[0] >= image.shape[0]:
+                    if (ycoord + IMAGE_SIZE[0] >= image.shape[0]) and (ycoord != 0):
                         ycoord = image.shape[0] - IMAGE_SIZE[0]
                     tile_coords.append((ycoord,xcoord))                    
         else:
