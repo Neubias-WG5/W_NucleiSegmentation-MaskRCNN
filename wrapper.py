@@ -18,9 +18,9 @@ def main(argv):
         nj.job.update(status=Job.RUNNING, progress=0, statusComment="Initialisation...")
         # 1. Prepare data for workflow
         in_imgs, gt_imgs, in_path, gt_path, out_path, tmp_path = prepare_data(problem_cls, nj, is_2d=True, **nj.flags)
-        files = [os.path.join(in_path,"{}.tif".format(image.id)) for image in in_imgs]
+        files = [image.filepath for image in in_imgs]
 
-        # 2. Run Mask-RCNN prediction
+        # 2. Run Mask R-CNN prediction
         nj.job.update(progress=25, statusComment="Launching workflow...")
 
         model_dir = "/app"
@@ -46,7 +46,7 @@ def main(argv):
             mask_img = dataset.merge_tiles(image_id, tile_masks)
             skimage.io.imsave(os.path.join(out_path,os.path.basename(files[i])), mask_img)
 
-        # 3. Upload data to Cytomine
+        # 3. Upload data to BIAFLOWS
         upload_data(problem_cls, nj, in_imgs, out_path, **nj.flags, monitor_params={
             "start": 60, "end": 90, "period": 0.1,
             "prefix": "Extracting and uploading polygons from masks"})

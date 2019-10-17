@@ -1,53 +1,53 @@
 {
   "name": "NucleiSegmentation-MaskRCNN",
-  "description": "Workflow for nuclei segmentation using Mask-RCNN",
+  "description": "Workflow for nuclei segmentation using Mask R-CNN",
   "container-image": {
     "image": "neubiaswg5/w_nucleisegmentation-maskrcnn",
     "type": "singularity"
   },
-  "command-line": "python wrapper.py CYTOMINE_HOST CYTOMINE_PUBLIC_KEY CYTOMINE_PRIVATE_KEY CYTOMINE_ID_PROJECT CYTOMINE_ID_SOFTWARE NUCLEI_MAJOR_AXIS",
+  "command-line": "python wrapper.py HOST PUBLIC_KEY PRIVATE_KEY PROJECT_ID SOFTWARE_ID NUCLEI_MAJOR_AXIS",
   "inputs": [
     {
-      "id": "cytomine_host",
+      "id": "host",
       "value-key": "@ID",
       "command-line-flag": "--@id",
-      "name": "Cytomine host",
+      "name": "BIAFLOWS host",
       "set-by-server": true,
       "optional": false,
       "type": "String"
     },
     {
-      "id": "cytomine_public_key",
+      "id": "public_key",
       "value-key": "@ID",
       "command-line-flag": "--@id",
-      "name": "Cytomine public key",
+      "name": "BIAFLOWS public key",
       "set-by-server": true,
       "optional": false,
       "type": "String"
     },
     {
-      "id": "cytomine_private_key",
+      "id": "private_key",
       "value-key": "@ID",
       "command-line-flag": "--@id",
-      "name": "Cytomine private key",
+      "name": "BIAFLOWS private key",
       "set-by-server": true,
       "optional": false,
       "type": "String"
     },
     {
-      "id": "cytomine_id_project",
+      "id": "project_id",
       "value-key": "@ID",
       "command-line-flag": "--@id",
-      "name": "Cytomine project ID",
+      "name": "BIAFLOWS project ID",
       "set-by-server": true,
       "optional": false,
       "type": "Number"
     },
     {
-      "id": "cytomine_id_software",
+      "id": "software_id",
       "value-key": "@ID",
       "command-line-flag": "--@id",
-      "name": "Cytomine software ID",
+      "name": "BIAFLOWS software ID",
       "set-by-server": true,
       "optional": false,
       "type": "Number"
