@@ -10,7 +10,7 @@ RUN git clone https://github.com/cytomine-uliege/Cytomine-python-client.git && \
 # Install Neubias-W5-Utilities (annotation exporter, compute metrics, helpers,...)
 RUN apt-get update && apt-get install libgeos-dev -y && apt-get clean
 RUN git clone https://github.com/Neubias-WG5/neubiaswg5-utilities.git && \
-    cd /neubiaswg5-utilities/ && git checkout tags/v0.7.0 && pip install .
+    cd /neubiaswg5-utilities/ && git checkout tags/v0.8.0 && pip install .
 
 # install utilities binaries
 RUN chmod +x /neubiaswg5-utilities/bin/*
@@ -28,7 +28,11 @@ RUN cd Mask_RCNN && \
     pip install -r requirements.txt && \
     python setup.py install
 
-ADD https://github.com/Neubias-WG5/W_NucleiSegmentation-MaskRCNN/releases/download/v1.3/weights.h5 /app/weights.h5
+RUN pip install gdown
+
+RUN mkdir /app && \
+    cd /app && \
+    gdown https://drive.google.com/uc?id=19EmZ57LXSArG-Z1HC8NOtrQUxGNzW3vv
 
 RUN chmod 444 /app/weights.h5
 
