@@ -76,7 +76,7 @@ class Dataset(utils.Dataset):
 
     def merge_tiles(self, image_id, tile_masks):
         orig_size = self.get_orig_size(image_id)
-        mask_img = np.zeros(orig_size, dtype=np.bool)
+        label_img = np.zeros(orig_size, dtype=np.uint16)
         tile_coords = self.tile_coords[image_id]
         objects = []
         for tile,coords in zip(tile_masks, tile_coords):
@@ -92,7 +92,7 @@ class Dataset(utils.Dataset):
                 except:
                     continue
                 
-                mask = mask[rmin:rmax+1, cmin:cmax+1]
+                mask = mask[rmin:rmax+1, cmin:cmax+1].astype(np.uint16)
                 m_coords[0] = coords[0] + rmin
                 m_coords[2] = coords[0] + rmax
                 m_coords[1] = coords[1] + cmin
@@ -102,14 +102,17 @@ class Dataset(utils.Dataset):
                                 'mask': mask})
 
         objects = sorted(objects, key=itemgetter('score'), reverse=True)
+        objnum = 0
         for obj in objects:
             roi = obj['roi']
-            mcrop = mask_img[roi[0]:roi[2]+1, roi[1]:roi[3]+1]
-            if ~(mcrop & obj['mask']).any():
-                mcrop = mcrop | obj['mask']
-                mask_img[roi[0]:roi[2]+1, roi[1]:roi[3]+1] = mcrop
+            mcrop = label_img[roi[0]:roi[2]+1, roi[1]:roi[3]+1]
+            if ~((mcrop.astype(np.bool) & obj['mask'].astype(np.bool)).any()):
+                objnum += 1
+                (obj['mask'])[obj['mask'] > 0] = objnum
+                mcrop = mcrop + obj['mask']
+                label_img[roi[0]:roi[2]+1, roi[1]:roi[3]+1] = mcrop
         
-        return mask_img.astype(np.uint8)
+        return label_img
 
     def get_orig_size(self, image_id):
         return self.orig_size.get(image_id, (0,0))
