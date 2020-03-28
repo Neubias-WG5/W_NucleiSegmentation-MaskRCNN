@@ -83,7 +83,6 @@ class Dataset(utils.Dataset):
             for i in range(tile['rois'].shape[0]):
                 m_coords = tile['rois'][i]
                 mask = tile['masks'][:,:,i]
-                mask = skimage.morphology.binary_erosion(mask, skimage.morphology.disk(1))
                 mrows = np.any(mask, axis=1)
                 mcols = np.any(mask, axis=0)
                 try:
@@ -116,8 +115,3 @@ class Dataset(utils.Dataset):
 
     def get_orig_size(self, image_id):
         return self.orig_size.get(image_id, (0,0))
-
-    def resize_to_orig_size(self, image_id, mask):
-        mask = skimage.transform.resize(mask, self.get_orig_size(image_id))
-        mask[mask > 0] = 1
-        return mask

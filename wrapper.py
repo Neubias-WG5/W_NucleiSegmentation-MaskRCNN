@@ -35,9 +35,6 @@ def main(argv):
 
         for i,image_id in enumerate(dataset.image_ids):
             tiles = dataset.load_image(image_id, nj.parameters.nuclei_major_axis)
-            orig_size = dataset.get_orig_size(image_id)
-            mask_img = np.zeros(orig_size, dtype=np.uint8)
-
             tile_masks = []
             for image in tiles:
                 mask = model.detect([image], verbose=0)[0]
