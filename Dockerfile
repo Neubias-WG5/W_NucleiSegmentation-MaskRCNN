@@ -40,4 +40,4 @@ ADD wrapper.py /app/wrapper.py
 
 ADD maskrcnn_utils.py /app/maskrcnn_utils.py
 
-ENTRYPOINT ["python3.6","/app/wrapper.py"]
+ENTRYPOINT ["python3.7","/app/wrapper.py"]
