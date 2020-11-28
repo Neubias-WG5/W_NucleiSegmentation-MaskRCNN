@@ -1,4 +1,4 @@
-FROM python:3.7-stretch
+FROM python:3.6.9-stretch
 
 # ------------------------------------------------------------------------------
 # Install Cytomine python client
@@ -19,7 +19,9 @@ RUN cp /biaflows-utilities/bin/* /usr/bin/ && \
 
 # ------------------------------------------------------------------------------
 
-RUN pip install scikit-learn keras h5py joblib
+RUN pip install scikit-learn joblib
+RUN pip install h5py==2.9.0
+RUN pip install keras==2.3.1
 RUN pip install tensorflow==1.13.1
 
 RUN git clone https://github.com/matterport/Mask_RCNN.git
@@ -40,4 +42,4 @@ ADD wrapper.py /app/wrapper.py
 
 ADD maskrcnn_utils.py /app/maskrcnn_utils.py
 
-ENTRYPOINT ["python3.7","/app/wrapper.py"]
+ENTRYPOINT ["python3.6","/app/wrapper.py"]
